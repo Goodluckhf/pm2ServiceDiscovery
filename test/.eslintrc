@@ -1,0 +1,10 @@
+{
+  "globals": {
+    "describe": false,
+    "it": false,
+    "beforeEach": false
+  },
+  "rules": {
+    "no-underscore-dangle": "warn"
+  }
+}
