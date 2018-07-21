@@ -1,0 +1,24 @@
+{
+  "name": "Pm2PrometheusConfGenerator",
+  "version": "1.0.0",
+  "description": "Listen pm2 events and generate conf file for prometheus",
+  "main": "index.js",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "bunyan-stdout-stream": "^1.2.1",
+    "pm2": "3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Goodluckhf/Pm2PrometheusConfGenerator.git"
+  },
+  "apps": [
+    {
+      "merge_logs": true,
+      "max_memory_restart": "200M",
+      "script": "app.js"
+    }
+  ],
+  "author": "Goodluckhf <Goodluckhf@yandex.ru>",
+  "license": "MIT"
+}
