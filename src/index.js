@@ -1,6 +1,7 @@
-import pm2          from 'pm2';
-import bunyan       from 'bunyan';
-import StdoutStream from 'bunyan-stdout-stream';
+import bunyan          from 'bunyan';
+import pm2             from 'pm2';
+import StdoutStream    from 'bunyan-stdout-stream';
+import Pm2Module       from './Pm2Module';
 
 const logger = bunyan.createLogger({
 	name   : 'pm2',
@@ -11,40 +12,9 @@ const logger = bunyan.createLogger({
 	}],
 });
 
-pm2.launchBus((error, bus) => {
-	if (error) {
-		logger.error({
-			message: 'bus error',
-			error,
-		});
-	}
-	
-	bus.on('process:event', (packet) => {
-		const {
-			event,
-			manually,
-			process: {
-				name,
-				//eslint-disable-next-line
-				pm_id,
-			},
-		} = packet;
-		
-		/*pm2.describe(pm_id, (error, res) => {
-			logger.info({
-				error,
-				res: res[0],
-				message: 'list'
-			});
-		});*/
-		
-		logger.info({
-			message: 'packet',
-			event,
-			name,
-			pm_id,
-			manually,
-		});
-	});
+const module = new Pm2Module(logger, pm2, {
+	events: ['start', 'restart', 'exit'],
 });
+
+module.startListen();
 //start, exit, restart

@@ -14,6 +14,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "bunyan": "^1.8.12",
     "bunyan-stdout-stream": "^1.2.1",
     "pm2": "3.0.0"
@@ -26,6 +27,9 @@
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "sinon-chai": "^3.2.0",
+    "sinon": "^6.1.4",
     "coveralls": "^3.0.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",

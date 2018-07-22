@@ -2,9 +2,13 @@
   "globals": {
     "describe": false,
     "it": false,
-    "beforeEach": false
+    "beforeEach": false,
+    "afterEach": false,
+    "before": false,
+    "after": false
   },
   "rules": {
-    "no-underscore-dangle": "warn"
+    "no-underscore-dangle": "warn",
+    "no-unused-expressions": "warn"
   }
 }
