@@ -29,7 +29,7 @@ describe('Pm2 events', () => {
 	});
 	
 	describe('Should start generate config', function () {
-		this.timeout(15000);
+		this.timeout(10000);
 		
 		
 		beforeEach(async () => {
@@ -96,6 +96,12 @@ describe('Pm2 events', () => {
 		});
 		
 		it('if exec "pm2 restart"', async () => {
+			await pm2.restartAsync(appName);
+			await bluebird.delay(50);
+			expect(this.generateConfigStub).to.have.been.called;
+		});
+		
+		it('if exec "pm2 reload"', async () => {
 			await pm2.restartAsync(appName);
 			await bluebird.delay(50);
 			expect(this.generateConfigStub).to.have.been.called;
