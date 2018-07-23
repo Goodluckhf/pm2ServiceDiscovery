@@ -23,7 +23,7 @@ class Config {
 	/**
 	 * @returns {string}
 	 */
-	toString() {
+	toJson() {
 		return JSON.stringify([{
 			targets: this.targets,
 		}]);

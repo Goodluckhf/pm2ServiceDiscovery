@@ -25,6 +25,6 @@ describe('Config', () => {
 		const newTarget = 'testTarget';
 		const config = Config.create(newTarget);
 		const expectedValue = JSON.stringify([{ targets: [newTarget] }]);
-		expect(config.toString()).to.be.equal(expectedValue);
+		expect(config.toJson()).to.be.equal(expectedValue);
 	});
 });
