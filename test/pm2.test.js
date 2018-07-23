@@ -5,13 +5,15 @@ import sinonChai from 'sinon-chai';
 import chai     from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import Module       from '../src/Pm2Module';
+import Module from '../src/Pm2Module';
 
 const logger = {
 	info() {},
 	error() {},
 };
 
+//@TODO: Сделать через конфиг
+// Пока так
 const pm2Module = new Module(logger, pm2, {
 	events: ['start', 'restart', 'exit'],
 });
