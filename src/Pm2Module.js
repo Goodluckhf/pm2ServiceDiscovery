@@ -5,6 +5,7 @@ export default class {
 		this.logger = logger;
 		this.pm2    = pm2;
 		this.config = config;
+		this.bus    = null;
 	}
 	
 	//eslint-disable-next-line class-methods-use-this
@@ -39,7 +40,12 @@ export default class {
 	
 	startListen() {
 		return new Promise((resolve, reject) => {
-			this.pm2.launchBus((error, bus) => {
+			if (this.bus) {
+				this.bus.on('process:event', this.onProcessHandler.bind(this));
+				return resolve();
+			}
+			
+			return this.pm2.launchBus((error, bus) => {
 				if (error) {
 					this.logger.error({
 						message: 'bus error',
@@ -48,10 +54,8 @@ export default class {
 					return reject(error);
 				}
 				
-				bus.on('process:event', (...args) => {
-					this.onProcessHandler(...args);
-				});
-				
+				this.bus = bus;
+				this.bus.on('process:event', this.onProcessHandler.bind(this));
 				return resolve();
 			});
 		});

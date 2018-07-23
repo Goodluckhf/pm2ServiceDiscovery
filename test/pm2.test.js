@@ -5,7 +5,7 @@ import sinonChai from 'sinon-chai';
 import chai     from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import Module from '../src/Pm2Module';
+import Module       from '../src/Pm2Module';
 
 const logger = {
 	info() {},
@@ -30,7 +30,6 @@ describe('Pm2 events', () => {
 	
 	describe('Should start generate config', function () {
 		this.timeout(10000);
-		
 		
 		beforeEach(async () => {
 			this.sandbox = sinon.createSandbox();
