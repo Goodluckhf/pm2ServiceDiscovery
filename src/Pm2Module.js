@@ -62,10 +62,10 @@ export default class {
 	}
 	
 	stopListen() {
-		if (!this.pm2.Client || !this.pm2.Client.sub) {
+		if (!this.bus) {
 			return;
 		}
 		
-		this.pm2.Client.sub.off('process:event');
+		this.bus.off('process:event');
 	}
 }
