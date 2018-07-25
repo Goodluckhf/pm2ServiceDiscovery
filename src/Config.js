@@ -12,32 +12,31 @@ class Config {
 	}
 	
 	/**
-	 * @param {string} target
+	 * @param {{}} target
 	 * @returns {Config}
 	 */
-	addTarget(target) {
-		this.targets.push(target);
+	addTarget({ host, port }) {
+		this.targets.push({
+			host,
+			port,
+		});
 		return this;
 	}
 	
 	/**
-	 * @returns {string}
+	 * @returns {{}}
 	 */
-	toJson() {
-		const result = this.targets.map((target) => {
-			console.log(target);
-			const splited = target.split(':');
+	getRawObject() {
+		return this.targets.map(({ host, port }) => {
 			return {
-				ServiceAddress: splited[0],
-				ServicePort   : parseInt(splited[1], 10),
+				ServiceAddress: host,
+				ServicePort   : port,
 			};
 		});
-		
-		return result;
 	}
 	
 	/**
-	 * @param {Array|string} opts
+	 * @param {Array<{}>|{}} opts
 	 * @returns {Config}
 	 */
 	static create(opts) {

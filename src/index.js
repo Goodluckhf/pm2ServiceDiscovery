@@ -71,7 +71,7 @@ router.get('/v1/agent/self', (req, res) => {
 router.get('/v1/catalog/service/:service', (req, res) => {
 	console.log('service', req.o.index);
 	setTimeout(() => {
-		return res.json(serviceDiscovery.generatedConfig.toJson(1));
+		return res.json(serviceDiscovery.generatedConfig.getRawObject());
 	}, 1000);
 });
 
