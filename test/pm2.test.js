@@ -8,7 +8,7 @@ import chaiAsPromised from 'chai-as-promised';
 import Pm2ServiceDiscovery from '../src/Pm2ServiceDiscovery';
 
 const logger = {
-	info(val) { console.log(val); },
+	info() {},
 	error() {},
 };
 

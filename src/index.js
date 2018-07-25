@@ -81,6 +81,6 @@ app.get('*', (req, res) => {
 	console.log('!!!!', req.url);
 	res.status(404).send('Not Found');
 });
-app.listen(9111);
+app.listen(config.pm2_service_discovery_port);
 
 serviceDiscovery.startListen();

@@ -63,9 +63,10 @@
       "restart",
       "exit"
     ],
-    "appNameFilter": "publishing",
-    "port_base": 9300,
-    "host": "host.docker.internal",
+    "pm2_service_discovery_port": 9111,
+    "app_name_filter": "publishing",
+    "target_base_port": 9300,
+    "target_host": "host.docker.internal",
     "service_name": "pm_service_discovery"
   },
   "author": "Goodluckhf <Goodluckhf@yandex.ru>",

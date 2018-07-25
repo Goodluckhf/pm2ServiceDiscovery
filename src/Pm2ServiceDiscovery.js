@@ -35,13 +35,13 @@ export default class {
 	 * @returns {[{}]}
 	 */
 	filterApps(apps) {
-		const regExp = new RegExp(`^${this.config.appNameFilter}`, 'i');
+		const regExp = new RegExp(`^${this.config.app_name_filter}`, 'i');
 		return apps
 			.filter(app => regExp.test(app.name))
 			.map((app) => {
 				return {
-					host: this.config.host,
-					port: this.config.port_base + app.pm_id,
+					host: this.config.target_host,
+					port: this.config.target_base_port + app.pm_id,
 				};
 			});
 	}
