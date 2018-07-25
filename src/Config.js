@@ -24,9 +24,16 @@ class Config {
 	 * @returns {string}
 	 */
 	toJson() {
-		return JSON.stringify([{
-			targets: this.targets,
-		}]);
+		const result = this.targets.map((target) => {
+			console.log(target);
+			const splited = target.split(':');
+			return {
+				ServiceAddress: splited[0],
+				ServicePort   : parseInt(splited[1], 10),
+			};
+		});
+		
+		return result;
 	}
 	
 	/**

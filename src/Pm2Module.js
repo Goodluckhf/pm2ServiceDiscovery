@@ -6,21 +6,32 @@ export default class {
 		this.pm2    = pm2;
 		this.config = config;
 		this.bus    = null;
+		this._generatedConfig = new Config();
 	}
 	
-	//eslint-disable-next-line class-methods-use-this
-	async generateConfig(opts) {
-		Config.create(opts);
+	get generatedConfig() {
+		return this._generatedConfig;
 	}
+	// Порт = базовый порт из конфига (9100) + pm_id
+	filterApps(apps) {
+		const regExp = new RegExp(`^${this.config.appNameFilter}`, 'i');
+		return apps
+			.filter(app => regExp.test(app.name))
+			.map(app => `${this.config.host}:${this.config.port_base + app.pm_id}`);
+	}
+	
+	async generateConfigByApps(apps) {
+		const filteredApps = this.filterApps(apps);
+		this.logger.info({ ...filteredApps });
+		this._generatedConfig = Config.create(filteredApps);
+	}
+	
 	
 	async onProcessHandler(packet) {
 		const {
 			event,
-			manually,
 			process: {
 				name,
-				//eslint-disable-next-line
-				pm_id,
 			},
 		} = packet;
 		
@@ -32,10 +43,10 @@ export default class {
 			message: 'packet',
 			event,
 			name,
-			pm_id,
-			manually,
 		});
-		await this.generateConfig();
+		const apps = await this.pm2.listAsync();
+		
+		await this.generateConfigByApps(apps);
 	}
 	
 	startListen() {

@@ -8,7 +8,7 @@ import chaiAsPromised from 'chai-as-promised';
 import Module from '../src/Pm2Module';
 
 const logger = {
-	info() {},
+	info(val) { console.log(val); },
 	error() {},
 };
 
@@ -35,7 +35,7 @@ describe('Pm2 events', () => {
 		
 		beforeEach(async () => {
 			this.sandbox = sinon.createSandbox();
-			this.generateConfigStub = this.sandbox.stub(pm2Module, 'generateConfig').resolves(true);
+			this.generateConfigStub = this.sandbox.stub(pm2Module, 'generateConfigByApps').resolves(true);
 			
 			await pm2.startAsync({
 				name  : appName,
