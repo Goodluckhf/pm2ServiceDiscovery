@@ -6,25 +6,53 @@ export default class {
 		this.pm2    = pm2;
 		this.config = config;
 		this.bus    = null;
-		this._generatedConfig = new Config();
+		this.lastConfig   = null;
+		this.actualConfig = null;
 	}
 	
-	get generatedConfig() {
-		return this._generatedConfig;
+	/**
+	 * @returns {boolean}
+	 */
+	isConfigChanged() {
+		return this.actualConfig !== this.lastConfig;
 	}
 	
-	// Порт = базовый порт из конфига (9100) + pm_id
+	/**
+	 * @returns {Promise<Config>}
+	 */
+	async getActualConfig() {
+		if (!this.actualConfig) {
+			const apps = await this.pm2.listAsync();
+			this.actualConfig = await this.generateConfigByApps(apps);
+		}
+		
+		return this.actualConfig;
+	}
+	
+	/**
+	 * Порт = базовый порт из конфига (9100) + pm_id
+	 * @param {[{}]} apps
+	 * @returns {[{}]}
+	 */
 	filterApps(apps) {
 		const regExp = new RegExp(`^${this.config.appNameFilter}`, 'i');
 		return apps
 			.filter(app => regExp.test(app.name))
-			.map(app => `${this.config.host}:${this.config.port_base + app.pm_id}`);
+			.map((app) => {
+				return {
+					host: this.config.host,
+					port: this.config.port_base + app.pm_id,
+				};
+			});
 	}
 	
-	async generateConfigByApps(apps) {
+	/**
+	 * @param {[{}]} apps
+	 * @returns {Config}
+	 */
+	generateConfigByApps(apps) {
 		const filteredApps = this.filterApps(apps);
-		this.logger.info({ ...filteredApps });
-		this._generatedConfig = Config.create(filteredApps);
+		return Config.create(filteredApps);
 	}
 	
 	
@@ -47,7 +75,9 @@ export default class {
 		});
 		const apps = await this.pm2.listAsync();
 		
-		await this.generateConfigByApps(apps);
+		const config = await this.generateConfigByApps(apps);
+		this.lastConfig   = this.actualConfig;
+		this.actualConfig = config;
 	}
 	
 	startListen() {
