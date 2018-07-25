@@ -12,6 +12,7 @@ export default class {
 	get generatedConfig() {
 		return this._generatedConfig;
 	}
+	
 	// Порт = базовый порт из конфига (9100) + pm_id
 	filterApps(apps) {
 		const regExp = new RegExp(`^${this.config.appNameFilter}`, 'i');

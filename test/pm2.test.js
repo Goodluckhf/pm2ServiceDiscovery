@@ -5,7 +5,7 @@ import sinonChai from 'sinon-chai';
 import chai     from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import Module from '../src/Pm2Module';
+import Pm2ServiceDiscovery from '../src/Pm2ServiceDiscovery';
 
 const logger = {
 	info(val) { console.log(val); },
@@ -14,7 +14,7 @@ const logger = {
 
 //@TODO: Сделать через конфиг
 // Пока так
-const pm2Module = new Module(logger, pm2, {
+const pm2ServiceDiscovery = new Pm2ServiceDiscovery(logger, pm2, {
 	events: ['start', 'restart', 'exit'],
 });
 
@@ -35,7 +35,7 @@ describe('Pm2 events', () => {
 		
 		beforeEach(async () => {
 			this.sandbox = sinon.createSandbox();
-			this.generateConfigStub = this.sandbox.stub(pm2Module, 'generateConfigByApps').resolves(true);
+			this.generateConfigStub = this.sandbox.stub(pm2ServiceDiscovery, 'generateConfigByApps').resolves(true);
 			
 			await pm2.startAsync({
 				name  : appName,
@@ -44,13 +44,13 @@ describe('Pm2 events', () => {
 				watch : false,
 			});
 			await pm2.stopAsync(appName);
-			await pm2Module.startListen();
+			await pm2ServiceDiscovery.startListen();
 		});
 		
 		
 		afterEach(async () => {
 			this.sandbox.restore();
-			pm2Module.stopListen();
+			pm2ServiceDiscovery.stopListen();
 			const apps = await pm2.describeAsync(appName);
 			if (!apps.length) {
 				return;

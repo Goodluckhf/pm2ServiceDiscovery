@@ -5,7 +5,7 @@ import StdoutStream    from 'bunyan-stdout-stream';
 import bluebird        from 'bluebird';
 import express         from 'express';
 import bodyParser      from 'body-parser';
-import Pm2Module       from './Pm2Module';
+import Pm2ServiceDiscovery       from './Pm2ServiceDiscovery';
 
 bluebird.promisifyAll(pm2);
 
@@ -19,7 +19,7 @@ const logger = bunyan.createLogger({
 });
 
 const config = pmx.initModule();
-const module = new Pm2Module(logger, pm2, config);
+const serviceDiscovery = new Pm2ServiceDiscovery(logger, pm2, config);
 
 
 const app = express();
@@ -50,11 +50,12 @@ router.use((error, req, res, next) => {
 router.get('/v1/catalog/services', (req, res) => {
 	console.log(req.url);
 	setTimeout(() => {
-		return res.json({ ds_targets: [] });
+		return res.json({ [config.service_name]: [] });
 	}, 1000);
 });
 
-
+// Беcполезный роут
+// Но прометеус не может без него
 router.get('/v1/agent/self', (req, res) => {
 	console.log(req.url);
 	
@@ -70,7 +71,7 @@ router.get('/v1/agent/self', (req, res) => {
 router.get('/v1/catalog/service/:service', (req, res) => {
 	console.log('service', req.o.index);
 	setTimeout(() => {
-		return res.json(module.generatedConfig.toJson(1));
+		return res.json(serviceDiscovery.generatedConfig.toJson(1));
 	}, 1000);
 });
 
@@ -82,4 +83,4 @@ app.get('*', (req, res) => {
 });
 app.listen(9111);
 
-module.startListen();
+serviceDiscovery.startListen();
