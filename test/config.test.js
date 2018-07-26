@@ -29,4 +29,40 @@ describe('Config', () => {
 		
 		expect(config.getRawObject()).to.be.deep.equal(expectedValue);
 	});
+	
+	describe('equals', () => {
+		it('Should return false if input object is null or not defined', () => {
+			const config = Config.create(testTarget);
+			expect(config.equals(null)).to.be.false;
+		});
+		
+		it('Should return false if input object is not instance of Config', () => {
+			const config = Config.create(testTarget);
+			expect(config.equals({})).to.be.false;
+		});
+		
+		it('Should return false if input config has empty targets', () => {
+			const config      = Config.create(testTarget);
+			const checkConfig = Config.create([]);
+			expect(config.equals(checkConfig)).to.be.false;
+		});
+		
+		it('Should return false if context config has empty targets', () => {
+			const config      = Config.create([]);
+			const checkConfig = Config.create(testTarget);
+			expect(config.equals(checkConfig)).to.be.false;
+		});
+		
+		it('Should return false if targets are not the same', () => {
+			const config      = Config.create({ host: 'test2', port: 3333 });
+			const checkConfig = Config.create(testTarget);
+			expect(config.equals(checkConfig)).to.be.false;
+		});
+		
+		it('Should return true if targets are the same', () => {
+			const config      = Config.create(testTarget);
+			const checkConfig = Config.create(testTarget);
+			expect(config.equals(checkConfig)).to.be.true;
+		});
+	});
 });

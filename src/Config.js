@@ -45,6 +45,10 @@ class Config {
 			return false;
 		}
 		
+		if (!(config instanceof Config)) {
+			return false;
+		}
+		
 		if (!this.targets.length && config.targets.length) {
 			return false;
 		}
