@@ -16,7 +16,7 @@
 [![NPM](https://nodei.co/npm/pm2-service-discovery-prom.png?downloads=true&downloadRank=true)](https://nodei.co/npm/pm2-service-discovery-prom/)
 
 This pm2 module will help you to expose product's metrics from pm2 instances.
-It will automatically listen for all your commands like:
+It will automatically listen to all your commands like:
 ```bash
 $ pm2 scale <pm2_id|name> <number>
 $ pm2 stop <pm2_id|name>
@@ -40,7 +40,7 @@ $ pm2 set pm2-service-discovery:target_base_port <your port>
 ```
 The result port value for each instance will be (`base_port` + `pm2_id`)
 For example if you set `target_host = localhost` and `target_base_port = 9300`
-And if you have instances with `pm2_id = 1` and `pm2_id = 11` Prometheus will came for metrics to:
+And if you have instances with `pm2_id = 1` and `pm2_id = 11` Prometheus will come for metrics to:
 * `localhost:9301/metrics`
 * `localhost:9311/metrics`
 
@@ -61,5 +61,5 @@ Then all you need is add several lines to `prometheus.yml` config and restart pr
     scrape_interval: "5s"
     consul_sd_configs:
       - server: '<pm2 service discovery host>:<pm2_service_discovery_port>'
-      - services: ['pm2_service_discovery'] # it can should be the same as config value service_name
+      - services: ['pm2_service_discovery'] # it should be the same as config value service_name
 ```

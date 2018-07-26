@@ -44,12 +44,6 @@ app.use(morgan('dev'));
 app.use(bodyParser.json({ limit: '5mb' }));
 const router = express.Router();
 
-//eslint-disable-next-line
-router.use((error, req, res, next) => {
-	logger.error({ error });
-	res.status(500).send('Internal server error');
-});
-
 router.get('/v1/catalog/services', makeServicesRoute(config));
 router.get('/v1/catalog/service/:service', makeServiceRoute(config, serviceDiscovery));
 
@@ -65,8 +59,12 @@ router.get('/v1/agent/self', (req, res) => {
 	});
 });
 
-
 app.use('/', router);
+//eslint-disable-next-line
+app.use((error, req, res, next) => {
+	logger.error({ error });
+	res.status(500).send('Internal server error');
+});
 app.get('*', (req, res) => {
 	res.status(404).send('Not Found');
 });

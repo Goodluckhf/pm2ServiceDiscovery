@@ -48,7 +48,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Goodluckhf/Pm2PrometheusConfGenerator.git"
+    "url": "git+https://github.com/Goodluckhf/pm2ServiceDiscovery.git"
   },
   "engines": {
     "node": ">=6.10.0"
