@@ -7,6 +7,7 @@
     "test": "mocha --ui bdd --reporter spec --require babel-register ./test/*.test.js ./test/**/*.test.js",
     "test:coverage:dev": "nyc --reporter=text --require babel-register mocha --ui bdd --reporter spec --require babel-register ./test/*.test.js ./test/**/*.test.js",
     "test:coverage": "nyc --reporter=lcov --require babel-register mocha --ui bdd --reporter spec --require babel-register ./test/*.test.js ./test/**/*.test.js",
+    "eslint": "npx eslint --quiet .",
     "report-coverage": "cat coverage/lcov.info | coveralls",
     "prebuild": "rimraf ./dist",
     "build": "babel src -d ./dist -s --ignore test.js",

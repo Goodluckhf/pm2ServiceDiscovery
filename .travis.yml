@@ -1,0 +1,29 @@
+sudo: false
+language: node_js
+cache:
+  directories:
+    - node_modules
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
+stages:
+  - test
+  - name: release
+    if: branch = master
+jobs:
+  include:
+    - stage: test
+      node_js:
+        - '8'
+      before_script:
+        - npm prune
+      script:
+        - npm run eslint
+        - npm run test:coverage
+      after_success:
+        - npm run report-coverage
+    - stage: release
+      node_js: '8'
+      script:
+        - npm run build
+        - npm run semantic-release
