@@ -5,7 +5,9 @@ import StdoutStream    from 'bunyan-stdout-stream';
 import bluebird        from 'bluebird';
 import express         from 'express';
 import bodyParser      from 'body-parser';
-import Pm2ServiceDiscovery       from './Pm2ServiceDiscovery';
+
+import Pm2ServiceDiscovery from './Pm2ServiceDiscovery';
+import makeServicesRoute   from './routes/services';
 
 bluebird.promisifyAll(pm2);
 
@@ -25,14 +27,12 @@ const serviceDiscovery = new Pm2ServiceDiscovery(logger, pm2, config);
 const app = express();
 app.use((req, res, next) => {
 	const { index } = req.query;
-	req.o = {};
-	req.o.index = index ? parseInt(index, 10) : 1;
 	
 	res.set({
 		'X-Consul-Effective-Consistency': 'leader',
 		'X-Consul-Knownleader'          : true,
 		'X-Consul-Lastcontact'          : 0,
-		'X-Consul-Index'                : req.o.index + 1,
+		'X-Consul-Index'                : index ? parseInt(index, 10) : 1,
 	});
 	next();
 });
@@ -47,12 +47,7 @@ router.use((error, req, res, next) => {
 	res.status(500).send('Internal server error');
 });
 
-router.get('/v1/catalog/services', (req, res) => {
-	console.log(req.url);
-	setTimeout(() => {
-		return res.json({ [config.service_name]: [] });
-	}, 1000);
-});
+router.get('/v1/catalog/services', makeServicesRoute(config));
 
 // Беcполезный роут
 // Но прометеус не может без него
