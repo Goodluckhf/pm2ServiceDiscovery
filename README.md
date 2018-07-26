@@ -14,6 +14,7 @@
 ![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)
 
 [![NPM](https://nodei.co/npm/pm2-service-discovery-prom.png?downloads=true&downloadRank=true)](https://nodei.co/npm/pm2-service-discovery-prom/)
+
 This pm2 module will help you to expose product's metrics from pm2 instances.
 It will automatically listen for all your commands like:
 ```bash
@@ -27,7 +28,7 @@ and then expose to your prometheus.
 ## Install
 Install via npm
 ```bash
-$ pm2 install pm2-service-discovery
+$ pm2 install pm2-service-discovery-prom
 ```
 
 ### Set your configs
