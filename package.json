@@ -1,7 +1,7 @@
 {
-  "name": "Pm2PrometheusConfGenerator",
+  "name": "pm2-service-discovery",
   "version": "1.0.0",
-  "description": "Listen pm2 events and generate conf file for prometheus",
+  "description": "Service discovery for pm2 which will listen your commands and expose target to prometheus",
   "main": "index.js",
   "scripts": {
     "test": "mocha --ui bdd --reporter spec --require babel-register ./test/*.test.js ./test/**/*.test.js",
@@ -14,15 +14,14 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "body-parser": "^1.18.3",
-    "bunyan": "^1.8.12",
+    "bluebird": "3.5.1",
+    "body-parser": "1.18.3",
+    "bunyan": "1.8.12",
     "bunyan-stdout-stream": "^1.2.1",
-    "express": "^4.16.3",
-    "js-yaml": "^3.12.0",
-    "morgan": "^1.9.0",
+    "express": "4.16.3",
+    "morgan": "1.9.0",
     "pm2": "3.0.0",
-    "pmx": "^1.6.7"
+    "pmx": "1.6.7"
   },
   "devDependencies": {
     "nyc": "^12.0.2",
@@ -52,7 +51,7 @@
   },
   "apps": [
     {
-      "name": "pm2-prometheus-conf-generator",
+      "name": "pm2-service-discovery",
       "merge_logs": true,
       "max_memory_restart": "200M",
       "script": "dist/index.js"
