@@ -8,6 +8,7 @@ import bodyParser      from 'body-parser';
 
 import Pm2ServiceDiscovery from './Pm2ServiceDiscovery';
 import makeServicesRoute   from './routes/services';
+import makeServiceRoute    from './routes/service';
 
 bluebird.promisifyAll(pm2);
 
@@ -32,13 +33,12 @@ app.use((req, res, next) => {
 		'X-Consul-Effective-Consistency': 'leader',
 		'X-Consul-Knownleader'          : true,
 		'X-Consul-Lastcontact'          : 0,
-		'X-Consul-Index'                : index ? parseInt(index, 10) : 1,
+		'X-Consul-Index'                : index ? parseInt(index, 10) + 1 : 1,
 	});
 	next();
 });
 
 app.use(bodyParser.json({ limit: '5mb' }));
-
 const router = express.Router();
 
 //eslint-disable-next-line
@@ -48,6 +48,7 @@ router.use((error, req, res, next) => {
 });
 
 router.get('/v1/catalog/services', makeServicesRoute(config));
+router.get('/v1/catalog/service/:service', makeServiceRoute(config, serviceDiscovery));
 
 // Беcполезный роут
 // Но прометеус не может без него
@@ -64,50 +65,7 @@ router.get('/v1/agent/self', (req, res) => {
 });
 
 
-let oldConfig = null;
-router.get('/v1/catalog/service/:service', async (req, res) => {
-	console.log(req.url);
-	const actualConfig = serviceDiscovery.getActualConfig();
-	
-	// Если модуль только стартанул,
-	// надо сразу сгенерировать и отдать конфиг
-	if (!actualConfig) {
-		const generatedConfig = await serviceDiscovery.generateConfig();
-		res.json(generatedConfig.getRawObject());
-		return;
-	}
-	
-	// Сам long polling
-	// По таймауту, если конфиг не изменился
-	// Отдаем текущий актуальный
-	let responseSent = false;
-	let interval     = null;
-	const timeout = setTimeout(() => {
-		clearInterval(interval);
-		if (responseSent) {
-			return;
-		}
-		
-		responseSent = true;
-		res.json(actualConfig.getRawObject());
-	}, config.polling_interval);
-	
-	interval = setInterval(() => {
-		const actualConfigForIteration = serviceDiscovery.getActualConfig();
-		if (actualConfigForIteration.equals(oldConfig)) {
-			return;
-		}
-		
-		clearTimeout(timeout);
-		clearInterval(interval);
-		oldConfig = actualConfigForIteration;
-		const newConfig = serviceDiscovery.getActualConfig();
-		res.json(newConfig.getRawObject());
-	}, 1000);
-});
-
 app.use('/', router);
-
 app.get('*', (req, res) => {
 	console.log('!!!!', req.url);
 	res.status(404).send('Not Found');
