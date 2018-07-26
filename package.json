@@ -1,5 +1,5 @@
 {
-  "name": "pm2-service-discovery",
+  "name": "pm2-service-discovery-prom",
   "version": "1.0.0",
   "description": "Service discovery for pm2 which will listen your commands and expose target to prometheus",
   "main": "index.js",
@@ -49,6 +49,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Goodluckhf/Pm2PrometheusConfGenerator.git"
+  },
+  "engines": {
+    "node": ">=6.10.0"
   },
   "apps": [
     {
