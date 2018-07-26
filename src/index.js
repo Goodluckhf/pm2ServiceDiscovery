@@ -68,10 +68,46 @@ router.get('/v1/agent/self', (req, res) => {
 	});
 });
 
-router.get('/v1/catalog/service/:service', (req, res) => {
-	console.log('service', req.o.index);
-	setTimeout(() => {
-		return res.json(serviceDiscovery.generatedConfig.getRawObject());
+
+let oldConfig = null;
+router.get('/v1/catalog/service/:service', async (req, res) => {
+	console.log(req.url);
+	const actualConfig = serviceDiscovery.getActualConfig();
+	
+	// Если модуль только стартанул,
+	// надо сразу сгенерировать и отдать конфиг
+	if (!actualConfig) {
+		const generatedConfig = await serviceDiscovery.generateConfig();
+		res.json(generatedConfig.getRawObject());
+		return;
+	}
+	
+	// Сам long polling
+	// По таймауту, если конфиг не изменился
+	// Отдаем текущий актуальный
+	let responseSent = false;
+	let interval     = null;
+	const timeout = setTimeout(() => {
+		clearInterval(interval);
+		if (responseSent) {
+			return;
+		}
+		
+		responseSent = true;
+		res.json(actualConfig.getRawObject());
+	}, config.polling_interval);
+	
+	interval = setInterval(() => {
+		const actualConfigForIteration = serviceDiscovery.getActualConfig();
+		if (actualConfigForIteration.equals(oldConfig)) {
+			return;
+		}
+		
+		clearTimeout(timeout);
+		clearInterval(interval);
+		oldConfig = actualConfigForIteration;
+		const newConfig = serviceDiscovery.getActualConfig();
+		res.json(newConfig.getRawObject());
 	}, 1000);
 });
 

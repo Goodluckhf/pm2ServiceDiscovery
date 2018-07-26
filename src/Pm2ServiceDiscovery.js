@@ -6,26 +6,13 @@ export default class {
 		this.pm2    = pm2;
 		this.config = config;
 		this.bus    = null;
-		this.lastConfig   = null;
 		this.actualConfig = null;
 	}
 	
 	/**
-	 * @returns {boolean}
+	 * @returns {Config}
 	 */
-	isConfigChanged() {
-		return this.actualConfig !== this.lastConfig;
-	}
-	
-	/**
-	 * @returns {Promise<Config>}
-	 */
-	async getActualConfig() {
-		if (!this.actualConfig) {
-			const apps = await this.pm2.listAsync();
-			this.actualConfig = await this.generateConfigByApps(apps);
-		}
-		
+	getActualConfig() {
 		return this.actualConfig;
 	}
 	
@@ -36,8 +23,10 @@ export default class {
 	 */
 	filterApps(apps) {
 		const regExp = new RegExp(`^${this.config.app_name_filter}`, 'i');
+		
 		return apps
 			.filter(app => regExp.test(app.name))
+			.filter(app => app.pm2_env.status === 'online')
 			.map((app) => {
 				return {
 					host: this.config.target_host,
@@ -55,6 +44,14 @@ export default class {
 		return Config.create(filteredApps);
 	}
 	
+	/**
+	 * @returns {Promise<Config>}
+	 */
+	async generateConfig() {
+		const apps = await this.pm2.listAsync();
+		this.actualConfig = this.generateConfigByApps(apps);
+		return this.actualConfig;
+	}
 	
 	async onProcessHandler(packet) {
 		const {
@@ -73,11 +70,8 @@ export default class {
 			event,
 			name,
 		});
-		const apps = await this.pm2.listAsync();
 		
-		const config = await this.generateConfigByApps(apps);
-		this.lastConfig   = this.actualConfig;
-		this.actualConfig = config;
+		await this.generateConfig();
 	}
 	
 	startListen() {

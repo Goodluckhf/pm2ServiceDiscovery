@@ -36,6 +36,32 @@ class Config {
 	}
 	
 	/**
+	 *
+	 * @param {Config} config
+	 * @return {boolean}
+	 */
+	equals(config) {
+		if (!config) {
+			return false;
+		}
+		
+		if (!this.targets.length && config.targets.length) {
+			return false;
+		}
+		
+		if (!config.targets.length && this.targets.length) {
+			return false;
+		}
+		
+		return this.targets.every((thisTarget) => {
+			return config.targets.some((configTarget) => {
+				return thisTarget.host === configTarget.host
+					&& thisTarget.port === configTarget.port;
+			});
+		});
+	}
+	
+	/**
 	 * @param {Array<{}>|{}} opts
 	 * @returns {Config}
 	 */
