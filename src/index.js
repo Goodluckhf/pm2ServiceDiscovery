@@ -5,6 +5,7 @@ import StdoutStream    from 'bunyan-stdout-stream';
 import bluebird        from 'bluebird';
 import express         from 'express';
 import bodyParser      from 'body-parser';
+import morgan          from 'morgan';
 
 import Pm2ServiceDiscovery from './Pm2ServiceDiscovery';
 import makeServicesRoute   from './routes/services';
@@ -38,6 +39,8 @@ app.use((req, res, next) => {
 	next();
 });
 
+app.use(morgan('dev'));
+
 app.use(bodyParser.json({ limit: '5mb' }));
 const router = express.Router();
 
@@ -53,8 +56,6 @@ router.get('/v1/catalog/service/:service', makeServiceRoute(config, serviceDisco
 // Беcполезный роут
 // Но прометеус не может без него
 router.get('/v1/agent/self', (req, res) => {
-	console.log(req.url);
-	
 	return res.json({
 		Config: {
 			Datacenter: 'dc1',
@@ -67,7 +68,6 @@ router.get('/v1/agent/self', (req, res) => {
 
 app.use('/', router);
 app.get('*', (req, res) => {
-	console.log('!!!!', req.url);
 	res.status(404).send('Not Found');
 });
 app.listen(config.pm2_service_discovery_port);

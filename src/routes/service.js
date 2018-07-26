@@ -2,7 +2,6 @@ export default (config, serviceDiscovery) => {
 	let oldConfig = null;
 	
 	return async (req, res) => {
-		console.log(req.url);
 		const actualConfig = serviceDiscovery.getActualConfig();
 		
 		// Если модуль только стартанул,
