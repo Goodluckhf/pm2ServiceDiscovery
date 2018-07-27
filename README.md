@@ -35,8 +35,8 @@ $ pm2 install pm2-service-discovery-prom
 
 Set `host` and `port` for generate target. Later prometheus will take this host for scrapping 
 ```bash
-$ pm2 set pm2-service-discovery:target_host <your host>
-$ pm2 set pm2-service-discovery:target_base_port <your port>
+$ pm2 set pm2-service-discovery-prom:target_host <your host>
+$ pm2 set pm2-service-discovery-prom:target_base_port <your port>
 ```
 The result port value for each instance will be (`base_port` + `pm2_id`)
 For example if you set `target_host = localhost` and `target_base_port = 9300`
@@ -47,12 +47,12 @@ And if you have instances with `pm2_id = 1` and `pm2_id = 11` Prometheus will co
 Set filter value for pm2 app names.
 This module will give only apps which has status `online` and name starts with this config value 
 ```bash
-$ pm2 set pm2-service-discovery:app_name_filter <instance name with metrics>
+$ pm2 set pm2-service-discovery-prom:app_name_filter <instance name with metrics>
 ```
 
 Set port for service discovery
 ```bash
-$ pm2 set pm2-service-discovery:pm2_service_discovery_port <port>
+$ pm2 set pm2-service-discovery-prom:pm2_service_discovery_port <port>
 ```
 
 Then all you need is add several lines to `prometheus.yml` config and restart prometheus:
