@@ -13,7 +13,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/Goodluckhf/pm2ServiceDiscovery.svg?style=flat-square)
 ![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)
 
-[![NPM](https://nodei.co/npm/pm2-service-discovery-prom.png?downloads=true&downloadRank=true)](https://nodei.co/npm/pm2-service-discovery-prom/)
+[![NPM](https://nodei.co/npm/pm2-service-discovery-prom.png?downloads=true&downloadRank=true)](https://nodei.co/npm/pm2-service-discovery-prom/) [![Greenkeeper badge](https://badges.greenkeeper.io/Goodluckhf/pm2ServiceDiscovery.svg)](https://greenkeeper.io/)
 
 This pm2 module will help you to expose product's metrics from pm2 instances.
 It will automatically listen to all your commands like:
