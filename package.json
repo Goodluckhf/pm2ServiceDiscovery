@@ -25,7 +25,6 @@
     "pmx": "1.6.7"
   },
   "devDependencies": {
-    "nyc": "^14.1.1",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -33,8 +32,6 @@
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "sinon-chai": "^3.2.0",
-    "sinon": "^7.3.2",
     "coveralls": "^3.0.1",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
@@ -44,7 +41,10 @@
     "lint-staged": "^9.1.0",
     "mocha": "^6.1.4",
     "mocha-lcov-reporter": "^1.3.0",
-    "semantic-release": "^15.5.4"
+    "nyc": "^14.1.1",
+    "semantic-release": "^15.13.19",
+    "sinon": "^7.3.2",
+    "sinon-chai": "^3.2.0"
   },
   "repository": {
     "type": "git",
@@ -151,6 +151,10 @@
         },
         {
           "type": "refactor",
+          "release": "patch"
+        },
+        {
+          "type": "chore",
           "release": "patch"
         }
       ]
