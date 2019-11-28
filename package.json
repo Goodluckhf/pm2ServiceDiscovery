@@ -15,7 +15,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "bluebird": "3.5.5",
+    "bluebird": "3.7.2",
     "body-parser": "1.19.0",
     "bunyan": "1.8.12",
     "bunyan-stdout-stream": "^1.2.1",
